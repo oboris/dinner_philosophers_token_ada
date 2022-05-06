@@ -30,14 +30,14 @@ procedure Dinner_Philosophers_Token is
 
          Empty_Order.Seize;
 
-         Access_Order.Seize;
+         --Access_Order.Seize;
 
          phil_num := dinner_order.First_Element;
          Put_Line("token go to" & phil_num'Img & " philosopher");
          ready_dinner(phil_num).Release;
          dinner_order.Delete_First;
 
-         Access_Order.Release;
+         Access_Order.Seize;
       end loop;
    end token;
 
@@ -58,21 +58,25 @@ procedure Dinner_Philosophers_Token is
       for i in 1 .. dinner_numbers loop
          Put_Line ("philosopher" & id'Img & " thinking");
 
-         Access_Order.Seize;
+         delay 2.0;
+         --Access_Order.Seize;
          dinner_order.Append(id);
          Empty_Order.Release;
-         Access_Order.Release;
+         --Access_Order.Release;
 
          Put_Line ("philosopher" & id'Img & " await token");
          ready_dinner(id).Seize;
 
+         delay 2.0;
          forks (id).Seize;
+         delay 1.0;
          forks (num_second_fork).Seize;
 
          Put_Line ("philosopher" & id'Img & " eating" & i'Img & " times");
 
          forks (num_second_fork).Release;
          forks (id).Release;
+         Access_Order.Release;
       end loop;
    end philosopher;
 
